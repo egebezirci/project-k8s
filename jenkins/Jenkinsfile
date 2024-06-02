@@ -4,7 +4,7 @@ pipeline {
 stages {
   stage ('kubectl'){
     steps {
-      kubeconfig(credentialsId: 'egebezirci', caCertificate: '', serverUrl: 'https://127.0.0.1:40763') {
+      kubeconfig(credentialsId: 'kubeconfig', caCertificate: '', serverUrl: 'https://127.0.0.1:40763') {
         sh "helm upgrade --install frontend  -n www --create-namespace  ./charts/www"
       }
 
