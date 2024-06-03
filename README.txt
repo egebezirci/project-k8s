@@ -18,5 +18,13 @@ If jenkins.sh fails to run, we may need to execute the command "sudo rm /etc/apt
 
 9-You should check whether Jenkins is running or not by using the command systemctl status jenkins.service.
 
-10-
+10-It is necessary to install Jenkins' Kubernetes plugins. These are: Kubernetes Client API Plugin, Kubernetes Credentials Plugin, and Kubernetes Plugin.
+
+11-The next step will be to load and manage the credentials required for Jenkins stages. These credentials should be for Github, DockerHub, and the secret file within kubeconfig.
+
+Jenkins-GitHub access should be with a GitHub token, Jenkins-DockerHub access should be with a username and password, and Jenkins-Kubernetes communication should be with a secret file.
+
+12-It will be important for Jenkins to access the docker group for the application to run and be controlled. Therefore, the Jenkins user should be added to the docker group on the server.
+
+13-Our application is ready! It can now be built and deployed.
 
