@@ -1,11 +1,31 @@
 pipeline {
+  environment {
+    REGISTRY = "egebezirci/frontend"
+    VERSION = "${BUILD_NUMBER}"
+  }
   agent any
 
 stages {
+
+  stage ('docker build') {
+    steps {
+      sh "docker build -t ${REGISTRY}:${VERSION} ./app/."
+    }
+  }
+  stage ('docker push') {
+    steps {
+      withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerPass', usernameVariable: 'dockerUser')]) {
+        sh "docker login -u ${env.dockerUser} -p ${env.dockerPass}"
+        sh "docker push ${REGISTRY}:${VERSION}"
+      }
+    }
+  }
+
+  
   stage ('kubectl'){
     steps {
       kubeconfig(credentialsId: 'kubeconfig', caCertificate: '', serverUrl: 'https://127.0.0.1:40763') {
-        sh "helm upgrade --install frontend  -n www --create-namespace  ./charts/www"
+        sh "helm upgrade --install frontend  -n www --create-namespace  ./charts/www  --set image.repository=${REGISTRY} --set image.tag=${VERSION}"
       }
 
     }
